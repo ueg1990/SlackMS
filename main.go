@@ -53,7 +53,7 @@ func twiml(w http.ResponseWriter, r *http.Request) {
   slack_msg := strings.Join(bodyArray[2:], " ")
   //resp, _ := http.Post("https://hooks.slack.com/services/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", "text/json",strings.NewReader("{\"text\":\"Random message from usman using Go\", \"channel\" : \"#general\", \"username\" : \"uehtesham90\", \"icon_url\":\"https://secure.gravatar.com/avatar/595b1952765efa4ff448f55a0e71b49a.jpg?s=72&d=https%3A%2F%2Fslack.global.ssl.fastly.net%2F3654%2Fimg%2Favatars%2Fava_0006-72.png\"}"))
   //resp, _ := http.Post("https://hooks.slack.com/services/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", "text/json",strings.NewReader("{\"text\": \""+slack_msg+"\", \"channel\" : \""+channel+"\", \"username\" : \"uehtesham90\", \"icon_url\":\"https://secure.gravatar.com/avatar/595b1952765efa4ff448f55a0e71b49a.jpg?s=72&d=https%3A%2F%2Fslack.global.ssl.fastly.net%2F3654%2Fimg%2Favatars%2Fava_0006-72.png\"}"))
-  resp, _ := http.Post("https://hooks.slack.com/services/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", "text/json",strings.NewReader("{\"text\": \""+slack_msg+"\", \"channel\" : \""+channel+"\", \"username\" : \""+slack_name+"\"}"))
+  resp, _ := http.Post("https://hooks.slack.com/services/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", "text/json",strings.NewReader("{\"text\": \""+slack_msg+"\", \"channel\" : \""+slack_channel+"\", \"username\" : \""+slack_name+"\"}"))
   fmt.Println(resp.Status)
   msg := "Responding..."
   if( resp.StatusCode >= 200 && resp.StatusCode < 300 ) {

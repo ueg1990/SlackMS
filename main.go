@@ -9,6 +9,7 @@ import (
   // "net/url"
   //"io/ioutil"
   "strings"
+  "os"
 )
  
 type TwiML struct {
@@ -22,7 +23,7 @@ type TwiML struct {
 func main() {
   http.HandleFunc("/", hello)
   http.HandleFunc("/twiml", twiml)
-  http.ListenAndServe(":3000", nil)
+  http.ListenAndServe(":"+os.Getenv("PORT"), nil)
 	// data := map[string]interface{}{}
 	// token := "xoxp-2757127568-2813046014-4209073904-35634c"
 	// resp, _ := http.Get("https://slack.com/api/users.list?token="+token)
@@ -75,5 +76,5 @@ func twiml(w http.ResponseWriter, r *http.Request) {
 }
 
 func hello(res http.ResponseWriter, req *http.Request) {
-  fmt.Fprintln(res, "Welcome to SlackMS!!!")
+  fmt.Println("Welcome to SlackMS!!!")
 }

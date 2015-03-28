@@ -20,6 +20,7 @@ type TwiML struct {
 }
  
 func main() {
+  http.HandleFunc("/", hello)
   http.HandleFunc("/twiml", twiml)
   http.ListenAndServe(":3000", nil)
 	// data := map[string]interface{}{}
@@ -71,4 +72,8 @@ func twiml(w http.ResponseWriter, r *http.Request) {
  
   w.Header().Set("Content-Type", "application/xml")
   w.Write(x)
+}
+
+func hello(res http.ResponseWriter, req *http.Request) {
+  fmt.Fprintln(res, "Welcome to SlackMS!!!")
 }

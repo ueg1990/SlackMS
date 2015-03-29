@@ -6,7 +6,7 @@ import (
   "net/http"
   "fmt"
   //"bytes"
-  // "net/url"
+  "net/url"
   "io/ioutil"
   "strings"
   "os"
@@ -25,6 +25,7 @@ func main() {
   populate_database()
   fmt.Println("Database populated")
   http.HandleFunc("/twiml", twiml)
+  http.HandleFunc("/sms", sms)
   http.ListenAndServe(":"+os.Getenv("PORT"), nil)
   //fmt.Println(user_info)
     
@@ -33,6 +34,47 @@ func main() {
 type Request struct {
    Ok bool
    Members []User
+}
+
+func sms(w http.ResponseWriter, r *http.Request) {
+  // Set initial variables
+  accountSid := os.Getenv("TWILIO_ACCOUNT_SID")
+  authToken := os.Getenv("TWILIO_AUTH_TOKEN")
+  urlStr := "https://api.twilio.com/2010-04-01/Accounts/" + accountSid + "/Messages.json"
+  fmt.Println("Hello sms!!!")
+  r.ParseForm()
+  fmt.Println(r.PostForm)
+  fmt.Println(r.PostForm["user_name"][0])
+  fmt.Println(r.PostForm["text"][0])
+  text := r.PostForm["text"][0]
+  bodyArray := strings.Fields(text)
+  to_slack_name := bodyArray[0]
+  slack_msg := strings.Join(bodyArray[1:], " ")
+  fmt.Println(to_slack_name, slack_msg) 
+  for _, value := range user_info {
+    if value["slack_name"] == to_slack_name {
+      fmt.Println("User found....send sms!!!")
+      // Build out the data for our message
+      v := url.Values{}
+      v.Set("To","+15148871900")
+      v.Set("From",os.Getenv("TWILIO_NUMBER"))
+      v.Set("Body",slack_msg)
+      rb := *strings.NewReader(v.Encode())
+     
+      // Create client
+      client := &http.Client{}
+     
+      req, _ := http.NewRequest("POST", urlStr, &rb)
+      req.SetBasicAuth(accountSid, authToken)
+      req.Header.Add("Accept", "application/json")
+      req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+     
+      // Make request
+      resp, _ := client.Do(req)
+      fmt.Println(resp.Status)
+    }
+  }
+
 }
 
 var user_info = make(map[string]map[string]string)
@@ -57,7 +99,7 @@ func populate_database() {
       user_info[j.Profile.Phone] = temp
     }
   }
-  //fmt.Println(user_info)
+  fmt.Println(user_info)
 }
  
 func twiml(w http.ResponseWriter, r *http.Request) {

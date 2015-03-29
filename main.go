@@ -43,8 +43,7 @@ func sms(w http.ResponseWriter, r *http.Request) {
   urlStr := "https://api.twilio.com/2010-04-01/Accounts/" + accountSid + "/Messages.json"
   r.ParseForm()
   fmt.Println(r.PostForm)
-  fmt.Println(r.PostForm["user_name"][0])
-  fmt.Println(r.PostForm["text"][0])
+  slack_channel := r.PostForm["channel_name"][0]
   text := r.PostForm["text"][0]
   bodyArray := strings.Fields(text)
   to_slack_name := bodyArray[0]
@@ -54,9 +53,12 @@ func sms(w http.ResponseWriter, r *http.Request) {
     if value["slack_name"] == to_slack_name {
       // Build out the data for our message
       v := url.Values{}
+      if key[:2] != "+1" {
+        key = "+1" + key
+      }
       v.Set("To", "+1" + key)
       v.Set("From",os.Getenv("TWILIO_NUMBER"))
-      v.Set("Body",slack_msg)
+      v.Set("Body", "#" + slack_channel + " " + slack_msg)
       rb := *strings.NewReader(v.Encode())
      
       // Create client

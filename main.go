@@ -41,7 +41,6 @@ func sms(w http.ResponseWriter, r *http.Request) {
   accountSid := os.Getenv("TWILIO_ACCOUNT_SID")
   authToken := os.Getenv("TWILIO_AUTH_TOKEN")
   urlStr := "https://api.twilio.com/2010-04-01/Accounts/" + accountSid + "/Messages.json"
-  fmt.Println("Hello sms!!!")
   r.ParseForm()
   fmt.Println(r.PostForm)
   fmt.Println(r.PostForm["user_name"][0])
@@ -51,12 +50,12 @@ func sms(w http.ResponseWriter, r *http.Request) {
   to_slack_name := bodyArray[0]
   slack_msg := strings.Join(bodyArray[1:], " ")
   fmt.Println(to_slack_name, slack_msg) 
-  for _, value := range user_info {
+  for key, value := range user_info {
     if value["slack_name"] == to_slack_name {
       fmt.Println("User found....send sms!!!")
       // Build out the data for our message
       v := url.Values{}
-      v.Set("To","+15148871900")
+      v.Set("To", key)
       v.Set("From",os.Getenv("TWILIO_NUMBER"))
       v.Set("Body",slack_msg)
       rb := *strings.NewReader(v.Encode())

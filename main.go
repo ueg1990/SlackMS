@@ -52,10 +52,9 @@ func sms(w http.ResponseWriter, r *http.Request) {
   fmt.Println(to_slack_name, slack_msg) 
   for key, value := range user_info {
     if value["slack_name"] == to_slack_name {
-      fmt.Println("User found....send sms!!!")
       // Build out the data for our message
       v := url.Values{}
-      v.Set("To", key)
+      v.Set("To", "+1" + key)
       v.Set("From",os.Getenv("TWILIO_NUMBER"))
       v.Set("Body",slack_msg)
       rb := *strings.NewReader(v.Encode())

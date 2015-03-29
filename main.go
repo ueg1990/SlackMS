@@ -56,7 +56,7 @@ func sms(w http.ResponseWriter, r *http.Request) {
       if key[:2] != "+1" {
         key = "+1" + key
       }
-      v.Set("To", "+1" + key)
+      v.Set("To", key)
       v.Set("From",os.Getenv("TWILIO_NUMBER"))
       v.Set("Body", "#" + slack_channel + " " + slack_msg)
       rb := *strings.NewReader(v.Encode())

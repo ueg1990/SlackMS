@@ -112,7 +112,7 @@ func twiml(w http.ResponseWriter, r *http.Request) {
 		slack_name := val["slack_name"]
 		slack_profilepic := val["slack_profilepic"]
 		slack_msg := strings.Join(bodyArray[1:], " ")
-		resp, _ := http.Post("https://hooks.slack.com/services/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", "text/json", strings.NewReader("{\"text\": \""+slack_msg+"\", \"channel\" : \""+slack_channel+"\", \"username\" : \""+slack_name+"\", \"icon_url\":\""+slack_profilepic+"\"}"))
+		resp, _ := http.Post(os.Getenv("SLACK_WEARHACKS_WEBHOOK_URL"), "text/json", strings.NewReader("{\"text\": \""+slack_msg+"\", \"channel\" : \""+slack_channel+"\", \"username\" : \""+slack_name+"\", \"icon_url\":\""+slack_profilepic+"\"}"))
 		fmt.Println(resp.Status)
 		msg := "Responding..."
 		if resp.StatusCode >= 200 && resp.StatusCode < 300 {

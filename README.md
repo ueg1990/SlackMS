@@ -32,6 +32,7 @@ $ heroku config:set SLACK_WEARHACKS_WEBHOOK_URL=<URL>
 $ heroku config:set TWILIO_ACCOUNT_SID=<ACCOUNT_SID> 
 $ heroku config:set TWILIO_AUTH_TOKEN=<AUTH_TOKEN>
 $ heroku config:set TWILIO_NUMBER=<NUMBER>
+$ heroku config:set PORT=<PORT>
 ```
 
 ### Setup Integration
